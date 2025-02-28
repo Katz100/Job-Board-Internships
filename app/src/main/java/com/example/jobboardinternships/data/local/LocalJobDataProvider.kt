@@ -8,7 +8,7 @@ object LocalJobDataProvider {
         Job(
             title = "Software Developer",
             organization = "Intel",
-            organizationLogo = "https://assets.phenompeople.com/CareerConnectResources/pp/PGBPGNGLOBAL/images/job_logo_config-1678365337336.jpg",
+            organizationLogo = "https://recruiting.paylocity.com/recruiting/jobs/GetLogoFile?moduleId=29893",
             datePosted = "2025-02-20T00:00:00",
             locations = "Folsom, CA, US",
             salary = "24/hr = 30/hr",
