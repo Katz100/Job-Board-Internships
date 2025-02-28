@@ -55,6 +55,8 @@ android {
 dependencies {
 
     implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
+    implementation(platform("androidx.compose:compose-bom:2025.02.00"))
+    implementation("androidx.paging:paging-compose:3.3.0-alpha05")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -64,6 +66,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.paging.common.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

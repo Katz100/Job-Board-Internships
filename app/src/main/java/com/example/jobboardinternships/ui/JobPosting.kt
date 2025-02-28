@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
@@ -37,7 +38,7 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun JobPosting(
-    job: Job,
+    job: Job?,
     onJobClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,16 +49,18 @@ fun JobPosting(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        modifier = modifier.padding(16.dp)
+        modifier = Modifier.fillMaxWidth()
+            .wrapContentHeight()
+            .padding(16.dp)
     ) {
 
         Column(modifier = Modifier.fillMaxWidth()) {
 
             Row(
-                modifier = modifier.padding(6.dp)
+                modifier = Modifier.padding(6.dp)
             ) {
                 GlideImage(
-                    model = job.organizationLogo,
+                    model = job?.organizationLogo,
                     contentDescription = "ok",
                     modifier = modifier.size(50.dp)
                     )
@@ -68,17 +71,17 @@ fun JobPosting(
                         modifier = modifier.fillMaxWidth()
                             .padding(6.dp)){
                         Text(
-                            text = job.title,
+                            text = job?.title.toString(),
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = formatDate(job.datePosted),
+                            text = formatDate(job?.datePosted.toString()),
                             fontSize = 15.sp,
                         )
                     }
                     Text(
-                        text = job.organization,
+                        text = job?.organization.toString(),
                         fontSize = 15.sp,
                         fontStyle = FontStyle.Italic,
                         modifier = modifier.padding(start = 6.dp)
@@ -88,7 +91,7 @@ fun JobPosting(
             }
 
             Text(
-                text = job.locations,
+                text = job?.locations.toString(),
                 modifier = modifier.padding(6.dp)
             )
 
@@ -96,7 +99,7 @@ fun JobPosting(
                 modifier = modifier.padding(12.dp)
             ){
                 Text(
-                    text = job.salary.toString(),
+                    text = job?.salary.toString(),
                     modifier = modifier.padding(6.dp)
                 )
             }
