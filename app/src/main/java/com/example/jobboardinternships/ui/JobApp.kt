@@ -26,7 +26,10 @@ import com.example.jobboardinternships.data.local.LocalJobDataProvider
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
-
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 private const val TAG = "MainActivity"
 
@@ -36,8 +39,17 @@ private const val TAG = "MainActivity"
 fun JobApp(
     modifier: Modifier = Modifier
 ) {
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var isSearchActive by rememberSaveable { mutableStateOf(false) }
+
     JobList(jobList = LocalJobDataProvider.testJobs,
         onJobPostingClicked = {},
+        onLeftArrowClicked = {},
+        onRightArrowClicked = {},
+        onQueryChange = {searchQuery = it},
+        isSearchActive = isSearchActive,
+        onSearchActiveChange = {isSearchActive = it},
+        searchQuery = searchQuery
         )
 }
 

@@ -9,5 +9,4 @@ data class Job(
     val locations: String,
     val salary: String?,
     ) {
-
 }
