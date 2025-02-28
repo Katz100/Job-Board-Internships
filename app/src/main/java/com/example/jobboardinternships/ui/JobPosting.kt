@@ -107,7 +107,7 @@ fun JobPosting(
                 modifier = modifier.padding(12.dp)
             ){
                 Text(
-                    text = job.salary.toString(),
+                    text = job.salary ?: "No Salary Disclosed",
                     modifier = modifier.padding(6.dp)
                 )
             }
