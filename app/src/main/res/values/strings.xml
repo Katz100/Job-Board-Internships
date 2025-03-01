@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Job Board Internships</string>
+    <string name="remote_job">Remote</string>
+    <string name="in_person_job">In Person</string>
 </resources>

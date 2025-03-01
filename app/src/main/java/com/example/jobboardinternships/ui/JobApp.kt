@@ -39,7 +39,11 @@ fun JobApp(
             onQueryChange = { viewModel.updateSearchQuery(it) },
             isSearchActive = isSearchActive,
             onSearchActiveChange = { isSearchActive = it },
-            searchQuery = jobUiState.searchQuery
+            searchQuery = jobUiState.searchQuery,
+            onSearchLocationQueryChange = {},
+            onSearchLocationActiveChange = {},
+            searchLocationQuery = "",
+            isSearchLocationActive = false,
         )
     } else {
         jobUiState.currentSelectedJob?.let {
