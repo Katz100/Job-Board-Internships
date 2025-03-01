@@ -2,6 +2,7 @@ package com.example.jobboardinternships.ui
 
 import androidx.lifecycle.ViewModel
 import com.example.jobboardinternships.data.Job
+import com.example.jobboardinternships.data.JobScreen
 import com.example.jobboardinternships.data.JobType
 import com.example.jobboardinternships.data.local.LocalJobDataProvider
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,9 @@ class JobViewModel: ViewModel() {
 
     fun selectJob(job: Job) {
         _uiState.update {
-            it.copy(currentSelectedJob = job)
+            it.copy(
+                currentSelectedJob = job,
+                currentScreen = JobScreen.JobDetails)
         }
     }
 }
