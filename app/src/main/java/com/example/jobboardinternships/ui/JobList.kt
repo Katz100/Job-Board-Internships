@@ -51,7 +51,7 @@ import com.example.jobboardinternships.data.Job
 import com.example.jobboardinternships.data.local.LocalJobDataProvider
 
 
-private const val TAG = "MainActivity"
+private const val TAG = "MainApp"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +64,7 @@ fun JobList(
     isSearchActive: Boolean,
     onQueryChange: (String) -> Unit,
     onSearchActiveChange: (Boolean) -> Unit,
+    onSearch: ((String) -> Unit)? = null,
     searchLocationQuery: String,
     onSearchLocationQueryChange: (String) -> Unit,
     isSearchLocationActive: Boolean,
@@ -79,7 +80,11 @@ fun JobList(
                 SearchBar(
                     query = searchQuery,
                     onQueryChange = { onQueryChange(it) },
-                    onSearch = { onSearchActiveChange(false) },
+                    onSearch = { onSearchActiveChange(false)
+                        if (onSearch != null) {
+                            onSearch(it)
+                        }
+                    },
                     active = isSearchActive,
                     onActiveChange = { onSearchActiveChange(it) },
                     modifier = Modifier

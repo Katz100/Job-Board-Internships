@@ -14,7 +14,7 @@ import com.example.jobboardinternships.data.Job
 import com.example.jobboardinternships.data.JobScreen
 import com.example.jobboardinternships.data.JobType
 
-private const val TAG = "MainActivity"
+private const val TAG = "MainApp"
 
 
 
@@ -39,6 +39,7 @@ fun JobApp(
             onQueryChange = { viewModel.updateSearchQuery(it) },
             isSearchActive = isSearchActive,
             onSearchActiveChange = { isSearchActive = it },
+            onSearch = { viewModel.updateJobPostings2(JobType.InOfficeAndRemote, it) },
             searchQuery = jobUiState.searchQuery,
             onSearchLocationQueryChange = {},
             onSearchLocationActiveChange = {},

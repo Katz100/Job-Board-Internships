@@ -649,4 +649,22 @@ object LocalJobDataProvider {
 
 
     )
+    val newTestJobs = listOf (
+        Job(
+            title = "Accounting",
+            organization = "Intel",
+            organizationLogo = "https://recruiting.paylocity.com/recruiting/jobs/GetLogoFile?moduleId=29893",
+            datePosted = "2025-02-20T00:00:00",
+            locations = "Folsom, CA, US",
+            salary = "24/hr = 30/hr",
+        ),
+        Job(
+            title = "Data Intern",
+            organization = "Intel",
+            organizationLogo = "https://recruiting.paylocity.com/recruiting/jobs/GetLogoFile?moduleId=29893",
+            datePosted = "2025-02-20T00:00:00",
+            locations = "Folsom, CA, US",
+            salary = "24/hr = 30/hr",
+        )
+    )
 }
