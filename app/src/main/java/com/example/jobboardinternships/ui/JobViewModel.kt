@@ -25,6 +25,22 @@ class JobViewModel: ViewModel() {
         updateJobPostings(JobType.InOfficeAndRemote, "")
     }
 
+    fun collapseColumn() {
+        _uiState.update {
+            it.copy(
+                collapseColumn = true
+            )
+        }
+    }
+
+    fun expandColumn() {
+        _uiState.update {
+            it.copy(
+                collapseColumn = false
+            )
+        }
+    }
+
     fun updateSearchQuery(newQuery: String) {
         _uiState.update {
             it.copy(

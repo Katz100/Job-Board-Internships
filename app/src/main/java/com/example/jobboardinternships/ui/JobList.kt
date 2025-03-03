@@ -22,6 +22,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -69,6 +71,9 @@ fun JobList(
     onSearchLocationQueryChange: (String) -> Unit,
     isSearchLocationActive: Boolean,
     onSearchLocationActiveChange: (Boolean) -> Unit,
+    collapseColumn: Boolean = false,
+    onCollapseColumnClicked: () -> Unit,
+    onExpandColumnIconClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -100,6 +105,21 @@ fun JobList(
                         Text("Search Results for: $searchQuery", modifier = Modifier.padding(16.dp))
                     }
             }
+                if (collapseColumn) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Icon(
+                            Icons.Rounded.KeyboardArrowDown,
+                            contentDescription = "Expand Column",
+                            modifier = Modifier
+                                .padding(end = 16.dp, top = 16.dp)
+                                .align(Alignment.CenterVertically)
+                                .clickable {
+                                onExpandColumnIconClicked()
+                            })
+                    }
+                }
+                if (!collapseColumn) {
                 SearchBar(
                     query = searchLocationQuery,
                     onQueryChange = { onSearchLocationQueryChange(it) },
@@ -144,6 +164,18 @@ fun JobList(
                             modifier = Modifier
                                 .padding(6.dp)
                         )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        Icons.Rounded.KeyboardArrowUp,
+                        contentDescription = "Collapse Column",
+                        modifier = Modifier
+                            .padding(end = 16.dp, top = 16.dp)
+                            .align(Alignment.CenterVertically)
+                            .clickable {
+                                Log.d(TAG, "Clicked")
+                                onCollapseColumnClicked()
+                            })
                     }
                 }
 
@@ -204,6 +236,8 @@ fun JobListingPreview() {
         isSearchLocationActive = false,
         searchLocationQuery = "",
         onSearchLocationQueryChange = {},
-        onSearchLocationActiveChange = {}
+        onSearchLocationActiveChange = {},
+        onExpandColumnIconClicked = {},
+        onCollapseColumnClicked = {}
     )
 }

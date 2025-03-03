@@ -45,6 +45,14 @@ fun JobApp(
             onSearchLocationActiveChange = {},
             searchLocationQuery = "",
             isSearchLocationActive = false,
+            onCollapseColumnClicked = {
+                Log.d(TAG, "Parent Click")
+                viewModel.collapseColumn()
+            },
+            onExpandColumnIconClicked = {
+                viewModel.expandColumn()
+            },
+            collapseColumn = jobUiState.collapseColumn
         )
     } else {
         jobUiState.currentSelectedJob?.let {

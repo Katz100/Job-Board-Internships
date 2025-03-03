@@ -10,7 +10,8 @@ data class JobUiState(
     val searchQuery: String = "",
     val isLoading: Boolean = false,
     val currentSelectedJob: Job? = null,
-    val currentScreen: JobScreen = JobScreen.Home
+    val currentScreen: JobScreen = JobScreen.Home,
+    val collapseColumn: Boolean = false
 ) {
 }
 
