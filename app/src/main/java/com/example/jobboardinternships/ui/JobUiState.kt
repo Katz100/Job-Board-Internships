@@ -8,10 +8,14 @@ data class JobUiState(
     val jobType: JobType = JobType.InOfficeAndRemote,
     val jobPostings: List<Job> = emptyList(),
     val searchQuery: String = "",
+    val locationQuery: String = "",
     val isLoading: Boolean = false,
     val currentSelectedJob: Job? = null,
     val currentScreen: JobScreen = JobScreen.Home,
-    val collapseColumn: Boolean = false
+    val collapseColumn: Boolean = false,
+    val offset: Int = 0,
+    val remoteSelected: Boolean = false,
+    val inPersonSelected: Boolean = false
 ) {
 }
 

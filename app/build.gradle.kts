@@ -51,6 +51,8 @@ android {
 
 dependencies {
 
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     implementation ("com.github.bumptech.glide:compose:1.0.0-beta01")
     implementation(platform("androidx.compose:compose-bom:2025.02.00"))
     implementation("androidx.paging:paging-compose:3.3.0-alpha05")

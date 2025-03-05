@@ -2,10 +2,12 @@ package com.example.jobboardinternships.ui
 
 import android.nfc.Tag
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -27,6 +29,9 @@ import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +44,7 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import com.example.jobboardinternships.R
 import com.example.jobboardinternships.data.Job
 import com.example.jobboardinternships.data.local.LocalJobDataProvider
+import kotlinx.coroutines.launch
 
 
 private const val TAG = "MainApp"
@@ -67,6 +74,7 @@ fun JobList(
     onQueryChange: (String) -> Unit,
     onSearchActiveChange: (Boolean) -> Unit,
     onSearch: ((String) -> Unit)? = null,
+    onSearchLocation: ((String) -> Unit)? = null,
     searchLocationQuery: String,
     onSearchLocationQueryChange: (String) -> Unit,
     isSearchLocationActive: Boolean,
@@ -74,8 +82,33 @@ fun JobList(
     collapseColumn: Boolean = false,
     onCollapseColumnClicked: () -> Unit,
     onExpandColumnIconClicked: () -> Unit,
+    isLoading: Boolean = true,
+    inPersonCardClick: () -> Unit,
+    remoteCardClick: () -> Unit,
+    remoteSelected: Boolean = false,
+    inPersonSelected: Boolean = false,
     modifier: Modifier = Modifier
 ) {
+
+    val state = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
+    val remoteCardColor: CardColors = if(remoteSelected) {
+        CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    } else {
+        CardDefaults.cardColors()
+    }
+
+    val inPersonCardColor: CardColors = if(inPersonSelected) {
+        CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    } else {
+        CardDefaults.cardColors()
+    }
+
 
     Scaffold (
         topBar = {
@@ -89,13 +122,16 @@ fun JobList(
                         if (onSearch != null) {
                             onSearch(it)
                         }
+                        scope.launch {
+                            state.scrollToItem(0)
+                        }
                     },
                     active = isSearchActive,
                     onActiveChange = { onSearchActiveChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),
-                    placeholder = { Text("Search...") },
+                    placeholder = { Text("Job Title") },
                     leadingIcon = {
                         Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
                     }
@@ -115,15 +151,23 @@ fun JobList(
                                 .padding(end = 16.dp, top = 16.dp)
                                 .align(Alignment.CenterVertically)
                                 .clickable {
-                                onExpandColumnIconClicked()
-                            })
+                                    onExpandColumnIconClicked()
+                                })
                     }
                 }
                 if (!collapseColumn) {
                 SearchBar(
                     query = searchLocationQuery,
                     onQueryChange = { onSearchLocationQueryChange(it) },
-                    onSearch = { onSearchLocationActiveChange(false) },
+                    onSearch = { onSearchLocationActiveChange(false)
+                        if (onSearchLocation != null) {
+                            onSearchLocation(it)
+                        }
+
+                        scope.launch {
+                            state.scrollToItem(0)
+                        }
+                    },
                     active = isSearchLocationActive,
                     onActiveChange = { onSearchLocationActiveChange(it) },
                     modifier = Modifier
@@ -146,7 +190,10 @@ fun JobList(
                         .horizontalScroll(rememberScrollState())
                 ) {
                     Card(
-                        onClick = {},
+                        onClick = {
+                                  remoteCardClick()
+                        },
+                        colors = remoteCardColor,
                         modifier = Modifier
                     ) {
                         Text(
@@ -156,7 +203,10 @@ fun JobList(
                         )
                     }
                     Card(
-                        onClick = {},
+                        onClick = {
+                               inPersonCardClick()
+                        },
+                        colors = inPersonCardColor,
                         modifier = Modifier.padding(start = 8.dp)
                     ) {
                         Text(
@@ -204,18 +254,28 @@ fun JobList(
             )
         },
     ) { innerPadding ->
-        val state = rememberLazyListState()
-        LazyColumn(
-            state = state,
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-            items(jobList.size) { index ->
-                val job = jobList[index]
-                JobPosting(
-                    job = job,
-                    onJobClicked = { onJobPostingClicked(job) })
+        if (!isLoading) {
+            LazyColumn(
+                state = state,
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+                items(jobList.size) { index ->
+
+                    val job = jobList[index]
+                    JobPosting(
+                        job = job,
+                        onJobClicked = { onJobPostingClicked(job) })
+                }
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
         }
     }
@@ -238,6 +298,9 @@ fun JobListingPreview() {
         onSearchLocationQueryChange = {},
         onSearchLocationActiveChange = {},
         onExpandColumnIconClicked = {},
-        onCollapseColumnClicked = {}
+        onCollapseColumnClicked = {},
+        isLoading = false,
+        inPersonCardClick = {},
+        remoteCardClick = {}
     )
 }

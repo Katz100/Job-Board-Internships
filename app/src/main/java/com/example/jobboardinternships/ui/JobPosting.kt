@@ -68,7 +68,7 @@ fun JobPosting(
             ) {
                 GlideImage(
                     model = imageModel,
-                    contentDescription = "ok",
+                    contentDescription = "Company Logo",
                     modifier = modifier.size(50.dp),
                 )
                 Column (
@@ -79,7 +79,7 @@ fun JobPosting(
                             .fillMaxWidth()
                             .padding(6.dp)){
                         Text(
-                            text = job.title,
+                            text = shortenText(job.title, 22),
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.weight(1f))
@@ -122,6 +122,16 @@ fun JobPostingPreview() {
         onJobClicked = { println("Clicked!") },
         job = LocalJobDataProvider.testJobs[0]
     )
+}
+
+fun shortenText(text: String, charLimit: Int): String {
+    var newText = text
+    if (newText.length > charLimit) {
+        newText = newText.replaceRange(charLimit, newText.length, "...")
+        return newText
+    } else {
+       return text
+    }
 }
 
 fun formatDate(unformattedDate: String, formatter: DateTimeFormatter): String {

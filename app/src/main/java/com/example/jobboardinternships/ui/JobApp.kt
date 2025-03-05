@@ -26,33 +26,32 @@ fun JobApp(
     val jobUiState = viewModel.uiState.collectAsState().value
 
     var isSearchActive by rememberSaveable { mutableStateOf(false) }
+    var isSearchLocationActive by rememberSaveable { mutableStateOf(false) }
 
     if (jobUiState.currentScreen == JobScreen.Home) {
         JobList(
             jobList = jobUiState.jobPostings,
-            onJobPostingClicked = { job: Job ->
-                viewModel.selectJob(job)
-
-            },
+            onJobPostingClicked = { job -> viewModel.selectJob(job) },
             onLeftArrowClicked = {},
             onRightArrowClicked = {},
             onQueryChange = { viewModel.updateSearchQuery(it) },
             isSearchActive = isSearchActive,
             onSearchActiveChange = { isSearchActive = it },
-            onSearch = { viewModel.updateJobPostings2(JobType.InOfficeAndRemote, it) },
+            onSearch = { viewModel.updateJobPostings(jobUiState.jobType, it) },
             searchQuery = jobUiState.searchQuery,
-            onSearchLocationQueryChange = {},
-            onSearchLocationActiveChange = {},
-            searchLocationQuery = "",
-            isSearchLocationActive = false,
-            onCollapseColumnClicked = {
-                Log.d(TAG, "Parent Click")
-                viewModel.collapseColumn()
-            },
-            onExpandColumnIconClicked = {
-                viewModel.expandColumn()
-            },
-            collapseColumn = jobUiState.collapseColumn
+            onSearchLocationQueryChange = {viewModel.updateSearchLocationQuery(it)},
+            onSearchLocationActiveChange = {isSearchLocationActive = it},
+            searchLocationQuery = jobUiState.locationQuery,
+            onSearchLocation = {viewModel.updateJobPostings(jobUiState.jobType, jobUiState.searchQuery)},
+            isSearchLocationActive = isSearchLocationActive,
+            onCollapseColumnClicked = { viewModel.collapseColumn() },
+            onExpandColumnIconClicked = { viewModel.expandColumn() },
+            collapseColumn = jobUiState.collapseColumn,
+            isLoading = jobUiState.isLoading,
+            remoteSelected = jobUiState.remoteSelected,
+            inPersonSelected = jobUiState.inPersonSelected,
+            inPersonCardClick = { viewModel.changeInPersonSelection() },
+            remoteCardClick = { viewModel.changeRemoteSelection() }
         )
     } else {
         jobUiState.currentSelectedJob?.let {

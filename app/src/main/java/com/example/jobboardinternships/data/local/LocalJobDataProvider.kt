@@ -6,7 +6,7 @@ import com.example.jobboardinternships.data.Job
 object LocalJobDataProvider {
     val testJobs = listOf(
         Job(
-            title = "Software Developer",
+            title = "Software Developer Long Title",
             organization = "Intel",
             organizationLogo = "https://recruiting.paylocity.com/recruiting/jobs/GetLogoFile?moduleId=29893",
             datePosted = "2025-02-20T00:00:00",

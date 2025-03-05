@@ -14,11 +14,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.jobboardinternships.ui.theme.JobBoardInternshipsTheme
 import com.example.jobboardinternships.ui.JobApp
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+private const val TAG = "MainApp"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             Scaffold { scaffoldPadding ->
