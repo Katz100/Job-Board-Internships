@@ -32,8 +32,8 @@ fun JobApp(
         JobList(
             jobList = jobUiState.jobPostings,
             onJobPostingClicked = { job -> viewModel.selectJob(job) },
-            onLeftArrowClicked = {},
-            onRightArrowClicked = {},
+            onLeftArrowClicked = {viewModel.decreaseOffset()},
+            onRightArrowClicked = {viewModel.increaseOffset()},
             onQueryChange = { viewModel.updateSearchQuery(it) },
             isSearchActive = isSearchActive,
             onSearchActiveChange = { isSearchActive = it },

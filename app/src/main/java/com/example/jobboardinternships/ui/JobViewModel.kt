@@ -108,20 +108,26 @@ class JobViewModel: ViewModel() {
     }
 
     fun increaseOffset() {
-        val oldOffset: Int = _uiState.value.offset
-        _uiState.update {
-            it.copy(
-                offset = oldOffset + 10
-            )
+        if (_uiState.value.jobPostings.size == 10) {
+            val oldOffset: Int = _uiState.value.offset
+            _uiState.update {
+                it.copy(
+                    offset = oldOffset + 10
+                )
+            }
+            updateJobPostings(_uiState.value.jobType, _uiState.value.searchQuery)
         }
     }
 
     fun decreaseOffset() {
-        val oldOffset: Int = _uiState.value.offset
-        _uiState.update {
-            it.copy(
-                offset = oldOffset - 10
-            )
+        if (_uiState.value.offset >= 10) {
+            val oldOffset: Int = _uiState.value.offset
+            _uiState.update {
+                it.copy(
+                    offset = oldOffset - 10
+                )
+            }
+            updateJobPostings(_uiState.value.jobType, _uiState.value.searchQuery)
         }
     }
     fun updateSearchQuery(newQuery: String) {
@@ -171,7 +177,7 @@ class JobViewModel: ViewModel() {
                             JobType.Remote -> "true"
                             JobType.InOffice -> "false"
                         }
-                    }&location_filter=${_uiState.value.locationQuery}")
+                    }&location_filter=${_uiState.value.locationQuery}&offset=${_uiState.value.offset}")
                     .get()
                     .addHeader("x-rapidapi-key", api_key)
                     .addHeader("x-rapidapi-host", "internships-api.p.rapidapi.com")

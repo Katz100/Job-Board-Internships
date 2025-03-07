@@ -237,7 +237,12 @@ fun JobList(
                 modifier = Modifier.height(80.dp),
                 content = {
                     IconButton(
-                        onClick = { onLeftArrowClicked() }
+                        onClick = {
+                            onLeftArrowClicked()
+                            scope.launch {
+                                state.scrollToItem(0)
+                            }
+                        }
                     ) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Previous Job Posting")
                     }
@@ -246,7 +251,12 @@ fun JobList(
 
 
                     IconButton(
-                        onClick = { onRightArrowClicked() }
+                        onClick = {
+                            onRightArrowClicked()
+                            scope.launch {
+                                state.scrollToItem(0)
+                            }
+                        }
                     ) {
                         Icon(Icons.Filled.ArrowForward, contentDescription = "Next Job Posting")
                     }
