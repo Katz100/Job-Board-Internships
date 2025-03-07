@@ -56,7 +56,8 @@ fun JobApp(
     } else {
         jobUiState.currentSelectedJob?.let {
             JobDetails(
-                job = it
+                job = it,
+                onBackPressed = {viewModel.goBackToHome()}
             )
         }
     }

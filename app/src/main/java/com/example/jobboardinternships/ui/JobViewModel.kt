@@ -46,9 +46,9 @@ class JobViewModel: ViewModel() {
         val inPersonSelected: Boolean = _uiState.value.inPersonSelected
         val jobType = if (remoteSelected && inPersonSelected) {
             JobType.InOfficeAndRemote
-        } else if ((remoteSelected == false) && inPersonSelected) {
+        } else if (!remoteSelected && inPersonSelected) {
             JobType.InOffice
-        } else if (remoteSelected && (inPersonSelected == false)) {
+        } else if (remoteSelected && !inPersonSelected) {
             JobType.Remote
         } else {
             JobType.InOfficeAndRemote
@@ -59,7 +59,6 @@ class JobViewModel: ViewModel() {
                 jobType = jobType,
             )
         }
-        Log.d(TAG, "JobType: ${_uiState.value.jobType.name}")
     }
 
     fun changeInPersonSelection() {
@@ -74,9 +73,9 @@ class JobViewModel: ViewModel() {
         val inPersonSelected: Boolean = _uiState.value.inPersonSelected
         val jobType = if (remoteSelected && inPersonSelected) {
             JobType.InOfficeAndRemote
-        } else if ((remoteSelected == false) && inPersonSelected) {
+        } else if (!remoteSelected && inPersonSelected) {
             JobType.InOffice
-        } else if (remoteSelected && (inPersonSelected == false)) {
+        } else if (remoteSelected && !inPersonSelected) {
             JobType.Remote
         } else {
             JobType.InOfficeAndRemote
@@ -87,8 +86,6 @@ class JobViewModel: ViewModel() {
                 jobType = jobType,
             )
         }
-
-        Log.d(TAG, "JobType: ${_uiState.value.jobType.name}")
     }
 
     fun collapseColumn() {
@@ -154,7 +151,6 @@ class JobViewModel: ViewModel() {
     }
 
     fun updateJobPostings2(jobType: JobType, query: String) {
-        Log.d(TAG, "Postings2")
         val jobPostings: List<Job> = LocalJobDataProvider.newTestJobs // Get data from api
 
         _uiState.update {
@@ -177,7 +173,8 @@ class JobViewModel: ViewModel() {
                             JobType.Remote -> "true"
                             JobType.InOffice -> "false"
                         }
-                    }&location_filter=${_uiState.value.locationQuery}&offset=${_uiState.value.offset}")
+                    }&location_filter=${_uiState.value.locationQuery}&offset=${_uiState.value.offset}" +
+                            "&description_type=html")
                     .get()
                     .addHeader("x-rapidapi-key", api_key)
                     .addHeader("x-rapidapi-host", "internships-api.p.rapidapi.com")
@@ -185,10 +182,10 @@ class JobViewModel: ViewModel() {
 
                 val response = client.newCall(request).execute()
                 val responseBody = response.body?.string()
-
+                Log.d(TAG, responseBody.toString())
 
                 val jobPostings = parseJobsFromResponse(responseBody)
-
+                Log.d(TAG, jobPostings.toString())
                 _uiState.update {
                     it.copy(
                         jobPostings = jobPostings,
@@ -249,10 +246,11 @@ class JobViewModel: ViewModel() {
                     organization = jsonObject.optString("organization", ""),
                     organizationUrl = jsonObject.optString("organization_url", ""),
                     salary = salary,
-                    title = jsonObject.optString("title")
+                    title = jsonObject.optString("title"),
+                    description = jsonObject.optString("description_html")
                 )
                 jobs.add(job)
-                Log.d(TAG, "Job: ${job.toString()}")
+                //Log.d(TAG, "Job: ${job.toString()}")
             }
         }
         return jobs
@@ -265,4 +263,11 @@ class JobViewModel: ViewModel() {
                 currentScreen = JobScreen.JobDetails)
         }
     }
+    fun goBackToHome() {
+        _uiState.update {
+            it.copy(
+                currentScreen = JobScreen.Home)
+        }
+    }
+
 }
