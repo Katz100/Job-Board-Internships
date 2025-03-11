@@ -13,7 +13,7 @@ object LocalJobDataProvider {
             locations = "Folsom, CA, US",
             salary = "24/hr = 30/hr",
             description = "Desc mawdlm alwdkm alkdmlkwdmlakmdlk mawlda;lmdkaw; kmdakwdm a;kdm ",
-            organizationUrl = "google.com"
+            organizationUrl = "https://google.com"
         ),
         Job(
             title = "Software Developer 2",

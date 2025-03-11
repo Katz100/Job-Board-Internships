@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.example.jobboardinternships.LocalDatabase.JobDatabase
+import com.example.jobboardinternships.LocalDatabase.SavedJobs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,7 +22,7 @@ import org.json.JSONArray
 
 private const val TAG = "ViewModel"
 
-class JobViewModel: ViewModel() {
+class JobViewModel(): ViewModel() {
     private val _uiState = MutableStateFlow(JobUiState())
     val uiState: StateFlow<JobUiState> = _uiState
 
@@ -244,13 +246,13 @@ class JobViewModel: ViewModel() {
                     locations = location,
                     organizationLogo = jsonObject.optString("organization_logo", ""),
                     organization = jsonObject.optString("organization", ""),
-                    organizationUrl = jsonObject.optString("organization_url", ""),
+                    organizationUrl = jsonObject.optString("url", ""),
                     salary = salary,
                     title = jsonObject.optString("title"),
                     description = jsonObject.optString("description_html")
                 )
                 jobs.add(job)
-                //Log.d(TAG, "Job: ${job.toString()}")
+                Log.d(TAG, "Job: ${job.toString()}")
             }
         }
         return jobs

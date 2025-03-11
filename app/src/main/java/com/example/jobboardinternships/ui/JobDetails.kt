@@ -32,7 +32,8 @@ import com.example.jobboardinternships.data.local.LocalJobDataProvider
 fun JobDetails(
     modifier: Modifier = Modifier,
     job: Job,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onJobApplyButtonClick: (String) -> Unit
 ) {
 
     BackHandler {
@@ -66,7 +67,7 @@ fun JobDetails(
         }
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onJobApplyButtonClick(job.organizationUrl) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
@@ -102,6 +103,6 @@ fun JobDetails(
 @Preview(showBackground = true)
 @Composable
 fun JobDetailsPreview() {
-    JobDetails(job = LocalJobDataProvider.testJobs[0], onBackPressed = {})
+    JobDetails(job = LocalJobDataProvider.testJobs[0], onBackPressed = {}, onJobApplyButtonClick = {})
 
 }

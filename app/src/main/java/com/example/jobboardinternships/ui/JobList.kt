@@ -92,7 +92,6 @@ fun JobList(
 
     val state = rememberLazyListState()
     val scope = rememberCoroutineScope()
-
     val remoteCardColor: CardColors = if(remoteSelected) {
         CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer

@@ -1,6 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+
+   // alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlin.compose)
+
 }
 
 android {
@@ -40,7 +45,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
+    //    kotlinCompilerExtensionVersion = "1.6.0"
     }
     packaging {
         resources {
@@ -50,6 +55,17 @@ android {
 }
 
 dependencies {
+
+    val roomVersion = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    //kapt("androidx.room:room-compiler:$room_version")
+
+
+    implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 

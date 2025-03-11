@@ -17,7 +17,10 @@ import com.example.jobboardinternships.ui.JobApp
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import android.util.Log
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
+import com.example.jobboardinternships.LocalDatabase.JobDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -26,16 +29,17 @@ private const val TAG = "MainApp"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val db = JobDatabase.getDatabase(this.applicationContext)
         enableEdgeToEdge()
         setContent {
+
             Scaffold { scaffoldPadding ->
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(scaffoldPadding)
                 ) {
-                    JobApp()
+                    JobApp(db)
                 }
             }
             }
