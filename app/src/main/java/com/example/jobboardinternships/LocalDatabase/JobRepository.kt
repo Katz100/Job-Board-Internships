@@ -21,4 +21,8 @@ class JobRepository(application: Application) {
         jobDao.delete(job)
     }
 
+    suspend fun jobExists(uid: Int): Boolean {
+        return jobDao.jobExists(uid)
+    }
+
 }

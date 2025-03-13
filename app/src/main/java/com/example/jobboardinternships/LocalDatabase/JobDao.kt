@@ -12,6 +12,9 @@ interface JobDao {
     @Query("SELECT * FROM SavedJobs")
     fun getAll(): LiveData<List<SavedJobs>>
 
+    @Query("SELECT EXISTS (SELECT 1 FROM SavedJobs where uid = :uid)")
+    suspend fun jobExists(uid: Int): Boolean
+
     @Delete
     suspend fun delete(job: SavedJobs)
 

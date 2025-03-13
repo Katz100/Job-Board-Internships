@@ -3,6 +3,7 @@ package com.example.jobboardinternships.ui
 import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,22 +42,8 @@ fun JobApp(
             jobList = jobUiState.jobPostings,
             onJobPostingClicked = { job ->
                 viewModel.selectJob(job)
-                val testSave: SavedJobs = SavedJobs(
-                    job.id.toInt(),
-                    job.title,
-                    job.organization,
-                    job.organizationLogo,
-                    job.organizationUrl,
-                    job.datePosted,
-                    job.locations,
-                    job.salary,
-                    ""
-                )
-
-                db.insertJob(testSave)
+                //db.insertJob(job)
                 Log.d(TAG, db.fetchAllJobs().value.toString())
-
-
                                   },
             onLeftArrowClicked = {viewModel.decreaseOffset()},
             onRightArrowClicked = {viewModel.increaseOffset()},
@@ -82,12 +69,28 @@ fun JobApp(
     } else {
         jobUiState.currentSelectedJob?.let {
             val uriHandler = LocalUriHandler.current
+            var isSaved by rememberSaveable { mutableStateOf(false) }
+
+            LaunchedEffect(it.id) {
+                isSaved = db.jobExists(it.id.toInt())
+            }
+
             JobDetails(
                 job = it,
                 onBackPressed = { viewModel.goBackToHome() },
                 onJobApplyButtonClick = { url ->
                     Log.d(TAG, url)
-                    uriHandler.openUri(url)}
+                    uriHandler.openUri(url)},
+                onSaveButtonClick = {
+                    if (isSaved) {
+                        isSaved = false
+                        db.deleteJob(it)
+                    } else {
+                        isSaved = true
+                        db.insertJob(it)
+                    }
+                },
+                isSaved = isSaved
             )
         } ?: Text(text = "Job Not Available")
     }

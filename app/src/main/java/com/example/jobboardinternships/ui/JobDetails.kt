@@ -11,9 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,9 +37,16 @@ fun JobDetails(
     modifier: Modifier = Modifier,
     job: Job,
     onBackPressed: () -> Unit,
-    onJobApplyButtonClick: (String) -> Unit
+    onJobApplyButtonClick: (String) -> Unit,
+    onSaveButtonClick: (Job) -> Unit,
+    isSaved: Boolean = false
 ) {
 
+    var saveIcon = if (isSaved) {
+        Icons.Rounded.Favorite
+    } else {
+        Icons.Rounded.FavoriteBorder
+    }
     BackHandler {
         onBackPressed()
     }
@@ -66,16 +77,31 @@ fun JobDetails(
             }
         }
 
-        Button(
-            onClick = { onJobApplyButtonClick(job.organizationUrl) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Apply Now"
-            )
+        Row {
+            OutlinedButton(
+                onClick = { onSaveButtonClick(job) },
+                modifier = Modifier.weight(1f).padding(16.dp),
+            ) {
+                Icon(
+                    saveIcon,
+                    contentDescription = "Save Icon",
+                    modifier = Modifier.padding(end = 6.dp)
+                )
+                Text(
+                    text = "Save"
+                )
+            }
+            Button(
+                onClick = { onJobApplyButtonClick(job.organizationUrl) },
+                modifier = Modifier.weight(1f).padding(16.dp)
+            ) {
+                Text(
+                    text = "Apply Now"
+                )
+            }
         }
+
+
 
         Text(
             text = job.locations
@@ -103,6 +129,10 @@ fun JobDetails(
 @Preview(showBackground = true)
 @Composable
 fun JobDetailsPreview() {
-    JobDetails(job = LocalJobDataProvider.testJobs[0], onBackPressed = {}, onJobApplyButtonClick = {})
+    JobDetails(
+        job = LocalJobDataProvider.testJobs[0],
+        onBackPressed = {},
+        onJobApplyButtonClick = {},
+        onSaveButtonClick = {})
 
 }
