@@ -18,9 +18,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import android.util.Log
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.jobboardinternships.LocalDatabase.JobDatabase
+import com.example.jobboardinternships.LocalDatabase.SavedJobViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -29,7 +32,7 @@ private const val TAG = "MainApp"
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val db = JobDatabase.getDatabase(this.applicationContext)
+        val savedJobViewModel = ViewModelProvider(this)[SavedJobViewModel::class.java]
         enableEdgeToEdge()
         setContent {
 
@@ -39,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxSize()
                         .padding(scaffoldPadding)
                 ) {
-                    JobApp(db)
+                    JobApp(savedJobViewModel)
                 }
             }
             }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jobboardinternships.LocalDatabase.JobDatabase
+import com.example.jobboardinternships.LocalDatabase.SavedJobViewModel
 import com.example.jobboardinternships.LocalDatabase.SavedJobs
 import com.example.jobboardinternships.data.Job
 import com.example.jobboardinternships.data.JobScreen
@@ -26,7 +27,7 @@ private const val TAG = "MainApp"
 
 @Composable
 fun JobApp(
-    db: JobDatabase,
+    db: SavedJobViewModel,
     modifier: Modifier = Modifier
 ) {
     val viewModel: JobViewModel = viewModel()
@@ -52,15 +53,8 @@ fun JobApp(
                     ""
                 )
 
-                coroutineScope.launch {
-                    db.jobDao().insert(testSave)
-                    Log.d(TAG, "Hello")
-                    val postings = db.jobDao().getAll()
-                    for (item in postings) {
-                        Log.d(TAG, item.title.toString())
-                    }
-                    //Log.d(TAG, db.jobDao().getAll().toString())
-                }
+                db.insertJob(testSave)
+                Log.d(TAG, db.fetchAllJobs().value.toString())
 
 
                                   },

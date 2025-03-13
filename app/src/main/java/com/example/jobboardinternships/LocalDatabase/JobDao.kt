@@ -1,5 +1,6 @@
 package com.example.jobboardinternships.LocalDatabase
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -9,7 +10,7 @@ import androidx.room.Query
 @Dao
 interface JobDao {
     @Query("SELECT * FROM SavedJobs")
-    suspend fun getAll(): List<SavedJobs>
+    fun getAll(): LiveData<List<SavedJobs>>
 
     @Delete
     suspend fun delete(job: SavedJobs)
