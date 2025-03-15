@@ -24,10 +24,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -36,6 +38,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
@@ -87,6 +90,7 @@ fun JobList(
     remoteCardClick: () -> Unit,
     remoteSelected: Boolean = false,
     inPersonSelected: Boolean = false,
+    onSavedJobsButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -214,7 +218,19 @@ fun JobList(
                                 .padding(6.dp)
                         )
                     }
+
                     Spacer(modifier = Modifier.weight(1f))
+
+                    Button(
+                        onClick = {onSavedJobsButtonClick()},
+                        modifier = Modifier.padding(end = 6.dp)
+                    ) {
+                        Icon(
+                            Icons.Rounded.Favorite,
+                            contentDescription = "Saved Jobs"
+                        )
+                    }
+
                     Icon(
                         Icons.Rounded.KeyboardArrowUp,
                         contentDescription = "Collapse Column",
@@ -310,6 +326,7 @@ fun JobListingPreview() {
         onCollapseColumnClicked = {},
         isLoading = false,
         inPersonCardClick = {},
-        remoteCardClick = {}
+        remoteCardClick = {},
+        onSavedJobsButtonClick = {}
     )
 }

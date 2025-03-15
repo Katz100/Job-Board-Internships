@@ -272,4 +272,14 @@ class JobViewModel(): ViewModel() {
         }
     }
 
+    fun goToSavedJobs() {
+        _uiState.update {
+            it.copy(
+                currentScreen = JobScreen.SavedJobs
+            )
+        }
+
+        Log.d(TAG, _uiState.value.currentScreen.toString())
+    }
+
 }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.jobboardinternships.data.local.LocalJobDataProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,11 +41,7 @@ fun JobApp(
     if (jobUiState.currentScreen == JobScreen.Home) {
         JobList(
             jobList = jobUiState.jobPostings,
-            onJobPostingClicked = { job ->
-                viewModel.selectJob(job)
-                //db.insertJob(job)
-                Log.d(TAG, db.fetchAllJobs().value.toString())
-                                  },
+            onJobPostingClicked = { job -> viewModel.selectJob(job) },
             onLeftArrowClicked = {viewModel.decreaseOffset()},
             onRightArrowClicked = {viewModel.increaseOffset()},
             onQueryChange = { viewModel.updateSearchQuery(it) },
@@ -64,9 +61,13 @@ fun JobApp(
             remoteSelected = jobUiState.remoteSelected,
             inPersonSelected = jobUiState.inPersonSelected,
             inPersonCardClick = { viewModel.changeInPersonSelection() },
-            remoteCardClick = { viewModel.changeRemoteSelection() }
+            remoteCardClick = { viewModel.changeRemoteSelection() },
+            onSavedJobsButtonClick = {
+                viewModel.goToSavedJobs()
+                Log.d(TAG, jobUiState.currentScreen.name)
+            }
         )
-    } else {
+    } else if (jobUiState.currentScreen == JobScreen.JobDetails) {
         jobUiState.currentSelectedJob?.let {
             val uriHandler = LocalUriHandler.current
             var isSaved by rememberSaveable { mutableStateOf(false) }
@@ -78,9 +79,7 @@ fun JobApp(
             JobDetails(
                 job = it,
                 onBackPressed = { viewModel.goBackToHome() },
-                onJobApplyButtonClick = { url ->
-                    Log.d(TAG, url)
-                    uriHandler.openUri(url)},
+                onJobApplyButtonClick = { url -> uriHandler.openUri(url) },
                 onSaveButtonClick = {
                     if (isSaved) {
                         isSaved = false
@@ -93,6 +92,15 @@ fun JobApp(
                 isSaved = isSaved
             )
         } ?: Text(text = "Job Not Available")
+    } else {
+        val jobList by db.fetchAllJobs().observeAsState(initial = emptyList())
+
+        UserSavedJobs(
+                modifier = modifier,
+                jobList = jobList,
+                onJobPostingClicked = {job -> viewModel.selectJob(job)}
+            )
+
     }
 }
 

@@ -80,7 +80,7 @@ fun JobDetails(
         Row {
             OutlinedButton(
                 onClick = { onSaveButtonClick(job) },
-                modifier = Modifier.weight(1f).padding(16.dp),
+                modifier = Modifier.weight(0.75f).padding(16.dp),
             ) {
                 Icon(
                     saveIcon,
