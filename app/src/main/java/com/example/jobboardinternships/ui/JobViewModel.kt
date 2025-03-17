@@ -282,4 +282,12 @@ class JobViewModel(): ViewModel() {
         Log.d(TAG, _uiState.value.currentScreen.toString())
     }
 
+    fun setViewingSavedJobs(viewingSavedJobs: Boolean) {
+        _uiState.update {
+            it.copy(
+                viewingSavedJobs = viewingSavedJobs
+            )
+        }
+    }
+
 }

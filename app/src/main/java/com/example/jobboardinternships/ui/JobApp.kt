@@ -39,6 +39,8 @@ fun JobApp(
     var isSearchLocationActive by rememberSaveable { mutableStateOf(false) }
 
     if (jobUiState.currentScreen == JobScreen.Home) {
+        viewModel.setViewingSavedJobs(false)
+
         JobList(
             jobList = jobUiState.jobPostings,
             onJobPostingClicked = { job -> viewModel.selectJob(job) },
@@ -78,7 +80,13 @@ fun JobApp(
 
             JobDetails(
                 job = it,
-                onBackPressed = { viewModel.goBackToHome() },
+                onBackPressed = {
+                    if (jobUiState.viewingSavedJobs) {
+                        viewModel.goToSavedJobs()
+                    } else {
+                        viewModel.goBackToHome()
+                    }
+                                },
                 onJobApplyButtonClick = { url -> uriHandler.openUri(url) },
                 onSaveButtonClick = {
                     if (isSaved) {
@@ -94,11 +102,12 @@ fun JobApp(
         } ?: Text(text = "Job Not Available")
     } else {
         val jobList by db.fetchAllJobs().observeAsState(initial = emptyList())
-
+        viewModel.setViewingSavedJobs(true)
         UserSavedJobs(
                 modifier = modifier,
                 jobList = jobList,
-                onJobPostingClicked = {job -> viewModel.selectJob(job)}
+                onJobPostingClicked = { job -> viewModel.selectJob(job) },
+                onBackPressed = { viewModel.goBackToHome() }
             )
 
     }

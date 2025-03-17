@@ -15,7 +15,8 @@ data class JobUiState(
     val collapseColumn: Boolean = false,
     val offset: Int = 0,
     val remoteSelected: Boolean = false,
-    val inPersonSelected: Boolean = false
+    val inPersonSelected: Boolean = false,
+    val viewingSavedJobs: Boolean = false
 ) {
 }
 
